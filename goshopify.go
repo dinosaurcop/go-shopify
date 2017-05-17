@@ -134,7 +134,6 @@ func (c *Client) NewRequest(method, urlStr string, body, options interface{}) (*
 			return nil, err
 		}
 	}
-	fmt.Println("request:", method, u.String(), string(js))
 	req, err := http.NewRequest(method, u.String(), bytes.NewBuffer(js))
 	if err != nil {
 		return nil, err
@@ -179,7 +178,6 @@ func CheckResponseError(r *http.Response) error {
 	if r.StatusCode >= 200 && r.StatusCode < 300 {
 		return nil
 	}
-	fmt.Println(r.StatusCode)
 
 	// Create an anonoymous struct to parse the JSON data into.
 	shopifyError := struct {
@@ -189,24 +187,13 @@ func CheckResponseError(r *http.Response) error {
 
 	resBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		panic(err)
 		return err
 	}
-
-	fmt.Println(resBody)
 
 	err = json.Unmarshal(resBody, &shopifyError)
 	if err != nil {
-		panic(err)
 		return err
 	}
-
-	// decoder := json.NewDecoder(r.Body)
-	// err = decoder.Decode(&shopifyError)
-	// if err != nil {
-	// 	panic(err)
-	// 	return err
-	// }
 
 	// Create the response error from the Shopify error.
 	responseError := ResponseError{
