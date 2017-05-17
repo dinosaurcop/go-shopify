@@ -13,6 +13,7 @@ type MetaField struct {
 	ValueType string `json:"value_type"`
 	Namespace string `json:"namespace"`
 }
+
 type Page struct {
 	Author         string      `json:"author"`
 	Title          string      `json:"title"`
@@ -21,6 +22,7 @@ type Page struct {
 	ID             int         `json:"id"`
 	Metafield      []MetaField `json:"metafield"`
 	ShopID         int         `json:"shop_id"`
+	Published      *bool       `json:"published, omitempty"` // Used for creating a page
 	TemplateSuffix *string     `json:"template_suffix, omitempty"`
 	CreatedAt      *time.Time  `json:"created_at"`
 	UpdatedAt      *time.Time  `json:"updated_at"`

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -52,6 +53,25 @@ type Client struct {
 	Theme    *ThemeService
 	Page     *PageService
 	Asset    *AssetService
+}
+
+// Returns a new Shopify API client with an already authenticated shopname and
+// token.
+func NewClient(app App, shopName, token string) *Client {
+	httpClient := http.DefaultClient
+
+	baseURL, _ := url.Parse(ShopBaseUrl(shopName))
+
+	c := &Client{client: httpClient, app: app, baseURL: baseURL, token: token}
+	c.Product = &ProductServiceOp{client: c}
+	c.Customer = &CustomerServiceOp{client: c}
+	c.Order = &OrderServiceOp{client: c}
+	c.Shop = &ShopServiceOp{client: c}
+	c.Webhook = &WebhookServiceOp{client: c}
+	c.Theme = &ThemeService{client: c}
+	c.Page = &PageService{client: c}
+	c.Asset = &AssetService{client: c}
+	return c
 }
 
 // A general response error that follows a similar layout to Shopify's response
@@ -114,7 +134,7 @@ func (c *Client) NewRequest(method, urlStr string, body, options interface{}) (*
 			return nil, err
 		}
 	}
-
+	fmt.Println("request:", method, u.String(), string(js))
 	req, err := http.NewRequest(method, u.String(), bytes.NewBuffer(js))
 	if err != nil {
 		return nil, err
@@ -127,25 +147,6 @@ func (c *Client) NewRequest(method, urlStr string, body, options interface{}) (*
 		req.Header.Add("X-Shopify-Access-Token", c.token)
 	}
 	return req, nil
-}
-
-// Returns a new Shopify API client with an already authenticated shopname and
-// token.
-func NewClient(app App, shopName, token string) *Client {
-	httpClient := http.DefaultClient
-
-	baseURL, _ := url.Parse(ShopBaseUrl(shopName))
-
-	c := &Client{client: httpClient, app: app, baseURL: baseURL, token: token}
-	c.Product = &ProductServiceOp{client: c}
-	c.Customer = &CustomerServiceOp{client: c}
-	c.Order = &OrderServiceOp{client: c}
-	c.Shop = &ShopServiceOp{client: c}
-	c.Webhook = &WebhookServiceOp{client: c}
-	c.Theme = &ThemeService{client: c}
-	c.Page = &PageService{client: c}
-	c.Asset = &AssetService{client: c}
-	return c
 }
 
 // Do sends an API request and populates the given interface with the parsed
@@ -178,6 +179,7 @@ func CheckResponseError(r *http.Response) error {
 	if r.StatusCode >= 200 && r.StatusCode < 300 {
 		return nil
 	}
+	fmt.Println(r.StatusCode)
 
 	// Create an anonoymous struct to parse the JSON data into.
 	shopifyError := struct {
@@ -185,11 +187,26 @@ func CheckResponseError(r *http.Response) error {
 		Errors interface{} `json:"errors"`
 	}{}
 
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&shopifyError)
+	resBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		panic(err)
 		return err
 	}
+
+	fmt.Println(resBody)
+
+	err = json.Unmarshal(resBody, &shopifyError)
+	if err != nil {
+		panic(err)
+		return err
+	}
+
+	// decoder := json.NewDecoder(r.Body)
+	// err = decoder.Decode(&shopifyError)
+	// if err != nil {
+	// 	panic(err)
+	// 	return err
+	// }
 
 	// Create the response error from the Shopify error.
 	responseError := ResponseError{
