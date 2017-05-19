@@ -22,12 +22,17 @@ type ProductServiceOp struct {
 	client *Client
 }
 
+type ProductImage struct {
+	Src string `json:"src"`
+}
+
 // Product represents a Shopify product
 type Product struct {
 	ID             int             `json:"id"`
 	Title          string          `json:"title"`
 	BodyHTML       string          `json:"body_html"`
 	Vendor         string          `json:"vendor"`
+	Images         []ProductImage  `json:"images"`
 	ProductType    string          `json:"product_type"`
 	Handle         string          `json:"handle"`
 	CreatedAt      *time.Time      `json:"created_at"`
