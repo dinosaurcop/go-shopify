@@ -65,3 +65,12 @@ func (s *AssetService) Upsert(asset *Asset) (*Asset, error) {
 	err := s.client.Put(path, wrappedData, resource)
 	return resource.Asset, err
 }
+
+// Update an existing asset.
+func (s *AssetService) Delete(asset *Asset) (*Asset, error) {
+	path := fmt.Sprintf("%s/%d/assets.json?asset[key]=%s", themesBasePath, asset.ThemeID, asset.Key)
+	wrappedData := AssetResource{}
+	resource := new(AssetResource)
+	err := s.client.Put(path, wrappedData, resource)
+	return resource.Asset, err
+}

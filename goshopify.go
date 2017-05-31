@@ -307,3 +307,9 @@ func (c *Client) Post(path string, data, resource interface{}) error {
 func (c *Client) Put(path string, data, resource interface{}) error {
 	return c.CreateAndDo("PUT", path, data, nil, resource)
 }
+
+// Perform a DELETE request for the given path and save the result in the given
+// resource.
+func (c *Client) Delete(path string, data, resource interface{}) error {
+	return c.CreateAndDo("DELETE", path, data, nil, resource)
+}
