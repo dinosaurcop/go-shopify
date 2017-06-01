@@ -53,7 +53,7 @@ type Client struct {
 	Theme                      *ThemeService
 	Page                       *PageService
 	Asset                      *AssetService
-	RecurringApplicationCharge *RecurringApplicationCharge
+	RecurringApplicationCharge *RecurringApplicationChargeService
 }
 
 // Returns a new Shopify API client with an already authenticated shopname and
