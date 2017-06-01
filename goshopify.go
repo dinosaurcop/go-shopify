@@ -45,14 +45,15 @@ type Client struct {
 	token string
 
 	// Services used for communicating with the API
-	Product  ProductService
-	Customer CustomerService
-	Order    OrderService
-	Shop     ShopService
-	Webhook  WebhookService
-	Theme    *ThemeService
-	Page     *PageService
-	Asset    *AssetService
+	Product                    ProductService
+	Customer                   CustomerService
+	Order                      OrderService
+	Shop                       ShopService
+	Webhook                    WebhookService
+	Theme                      *ThemeService
+	Page                       *PageService
+	Asset                      *AssetService
+	RecurringApplicationCharge *RecurringApplicationCharge
 }
 
 // Returns a new Shopify API client with an already authenticated shopname and
@@ -71,6 +72,7 @@ func NewClient(app App, shopName, token string) *Client {
 	c.Theme = &ThemeService{client: c}
 	c.Page = &PageService{client: c}
 	c.Asset = &AssetService{client: c}
+	c.RecurringApplicationCharge = &RecurringApplicationChargeService{client: c}
 	return c
 }
 

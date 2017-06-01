@@ -71,3 +71,16 @@ func (app App) VerifyAuthorizationURL(u *url.URL) bool {
 
 	return app.VerifyMessage(message, messageMAC)
 }
+
+// func (app App) VerifyURL(u *url.URL, hmac string) bool {
+// 	q := u.Query()
+// 	messageMAC := q.Get("hmac")
+
+// 	// Remove hmac and signature and leave the rest of the parameters alone.
+// 	q.Del("hmac")
+// 	q.Del("signature")
+
+// 	message := q.Encode()
+
+// 	return app.VerifyMessage(message, messageMAC)
+// }
