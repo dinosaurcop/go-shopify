@@ -58,3 +58,10 @@ func (s *RecurringApplicationChargeService) Activate(charge RecurringApplication
 	err := s.client.Post(path, wrappedData, resource)
 	return resource.RecurringApplicationCharge, err
 }
+
+func (s *RecurringApplicationChargeService) CustomizeCap(charge RecurringApplicationCharge) (*RecurringApplicationCharge, error) {
+	path := fmt.Sprintf("%s/%d/customize.json?recurring_application_charge[capped_amount]=%s", billingBasePath, charge.Id, charge.CappedAmount.String())
+	resource := new(RecurringApplicationChargeResource)
+	err := s.client.Put(path, nil, resource)
+	return resource.RecurringApplicationCharge, err
+}
