@@ -10,18 +10,19 @@ const billingBasePath = "admin/recurring_application_charges"
 
 // Theme represents a Shopify theme
 type RecurringApplicationCharge struct {
-	CappedAmount       decimal.Decimal `json:"capped_amount"`
-	ConfirmationUrl    string          `json:"confirmation_url"`
-	ReturnUrl          string          `json:"return_url"`
-	DecoratedReturnUrl string          `json:"decorated_return_url"`
-	Name               string          `json:"name"`
-	Price              decimal.Decimal `json:"price"`
-	CreatedAt          *time.Time      `json:"created_at"`
-	UpdatedAt          *time.Time      `json:"updated_at"`
-	Id                 int             `json:"id"`
-	Status             string          `json:"status"`
-	Terms              string          `json:"terms"`
-	Test               bool            `json:"test,omitempty"`
+	CappedAmount          decimal.Decimal `json:"capped_amount"`
+	ConfirmationUrl       string          `json:"confirmation_url"`
+	ReturnUrl             string          `json:"return_url"`
+	DecoratedReturnUrl    string          `json:"decorated_return_url"`
+	UpdateCappedAmountUrl string          `json:"update_capped_amount_url,omitempty"`
+	Name                  string          `json:"name"`
+	Price                 decimal.Decimal `json:"price"`
+	CreatedAt             *time.Time      `json:"created_at"`
+	UpdatedAt             *time.Time      `json:"updated_at"`
+	Id                    int             `json:"id"`
+	Status                string          `json:"status"`
+	Terms                 string          `json:"terms"`
+	Test                  bool            `json:"test,omitempty"`
 }
 
 // Represents the result from the themes/X.json endpoint
