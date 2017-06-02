@@ -66,3 +66,12 @@ func (s *RecurringApplicationChargeService) CustomizeCap(charge RecurringApplica
 	err := s.client.Put(path, nil, resource)
 	return resource.RecurringApplicationCharge, err
 }
+
+// Get individual order
+func (s *RecurringApplicationChargeService) Delete(chargeID int, options interface{}) (*RecurringApplicationCharge, error) {
+	path := fmt.Sprintf("%s/%d.json", billingBasePath, chargeID)
+	wrappedData := RecurringApplicationChargeResource{}
+	resource := new(RecurringApplicationChargeResource)
+	err := s.client.Delete(path, wrappedData, resource)
+	return resource.RecurringApplicationCharge, err
+}
