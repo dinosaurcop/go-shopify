@@ -3,6 +3,7 @@ package goshopify
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"net/url"
 )
@@ -56,6 +57,16 @@ func (app App) VerifyMessage(message, messageMAC string) bool {
 	actualMac, _ := hex.DecodeString(messageMAC)
 
 	return hmac.Equal(actualMac, expectedMAC)
+}
+
+// Verify a message against a message HMAC
+func (app App) VerifyWebhookMessage(message, messageMAC string) bool {
+	mac := hmac.New(sha256.New, []byte(app.ApiSecret))
+	mac.Write([]byte(message))
+	expectedMAC := mac.Sum(nil)
+	expectedMACBase64 := base64.StdEncoding.EncodeToString([]byte(expectedMAC))
+
+	return hmac.Equal([]byte(messageMAC), []byte(expectedMACBase64))
 }
 
 // Verifying URL callback parameters.
