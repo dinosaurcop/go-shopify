@@ -21,7 +21,7 @@ type RecurringApplicationCharge struct {
 	Id                 int             `json:"id"`
 	Status             string          `json:"status"`
 	Terms              string          `json:"terms"`
-	Test               string          `json:"test,omitempty"`
+	Test               bool            `json:"test,omitempty"`
 }
 
 // Represents the result from the themes/X.json endpoint
