@@ -65,7 +65,6 @@ func (app App) VerifyWebhookMessage(message, messageMAC string) bool {
 	mac.Write([]byte(message))
 	expectedMAC := mac.Sum(nil)
 	expectedMACBase64 := base64.StdEncoding.EncodeToString([]byte(expectedMAC))
-
 	return hmac.Equal([]byte(messageMAC), []byte(expectedMACBase64))
 }
 
